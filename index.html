@@ -22,36 +22,16 @@
     .layer{ position:fixed; inset:0; pointer-events:none; z-index:-1; }
     .userbg{ background-size: cover; background-position: center; background-repeat:no-repeat; opacity:.35; transition: opacity .3s ease; }
 
-    .gradient{
-      background: radial-gradient(1200px 800px at 15% 20%, #1b2331 0%, transparent 60%),
-                  radial-gradient(1000px 700px at 90% 80%, #0e2031 0%, transparent 60%),
-                  linear-gradient(120deg, var(--bg2), var(--bg1));
-      animation: hue 30s linear infinite; filter: saturate(1.05);
-    }
+    .gradient{ background: radial-gradient(1200px 800px at 15% 20%, #1b2331 0%, transparent 60%), radial-gradient(1000px 700px at 90% 80%, #0e2031 0%, transparent 60%), linear-gradient(120deg, var(--bg2), var(--bg1)); animation: hue 30s linear infinite; filter: saturate(1.05); }
     @keyframes hue{ from{ filter:hue-rotate(0deg) saturate(1.05);} to{ filter:hue-rotate(360deg) saturate(1.05);} }
 
-    .grid{
-      background-image:
-        linear-gradient(rgba(58,160,255,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(58,160,255,0.08) 1px, transparent 1px);
-      background-size: 40px 40px, 40px 40px; background-position: 0 0, 0 0;
-      animation: pan 20s linear infinite;
-    }
+    .grid{ background-image: linear-gradient(rgba(58,160,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(58,160,255,0.08) 1px, transparent 1px); background-size: 40px 40px, 40px 40px; background-position: 0 0, 0 0; animation: pan 20s linear infinite; }
     @keyframes pan{ to{ background-position: 40px 0, 0 40px; } }
 
-    .twinkle{
-      background:
-        radial-gradient(2px 2px at 10% 15%, rgba(255,255,255,0.14) 0 2px, transparent 3px),
-        radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.12) 0 2px, transparent 3px),
-        radial-gradient(2px 2px at 30% 85%, rgba(255,255,255,0.10) 0 2px, transparent 3px);
-      animation: fade 6s ease-in-out infinite;
-    }
+    .twinkle{ background: radial-gradient(2px 2px at 10% 15%, rgba(255,255,255,0.14) 0 2px, transparent 3px), radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.12) 0 2px, transparent 3px), radial-gradient(2px 2px at 30% 85%, rgba(255,255,255,0.10) 0 2px, transparent 3px); animation: fade 6s ease-in-out infinite; }
     @keyframes fade{ 0%,100%{opacity:.45} 50%{opacity:.2} }
 
-    .streaks{
-      background-image: repeating-linear-gradient(200deg, rgba(58,160,255,.08) 0 2px, transparent 2px 20px);
-      animation: drift 8s linear infinite; opacity:.22;
-    }
+    .streaks{ background-image: repeating-linear-gradient(200deg, rgba(58,160,255,.08) 0 2px, transparent 2px 20px); animation: drift 8s linear infinite; opacity:.22; }
     @keyframes drift{ to{ background-position: 200px -200px; } }
 
     /* Layout */
@@ -66,10 +46,7 @@
       text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 0 6px rgba(245,200,74,.40), 0 0 12px rgba(245,200,74,.20);
       position:relative; line-height:1; display:inline-block; animation: pulseGlow 3s ease-in-out infinite;
     }
-    @keyframes pulseGlow{
-      0%, 100%{ text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 0 6px rgba(245,200,74,.40), 0 0 12px rgba(245,200,74,.20); }
-      50%{ text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 0 22px rgba(245,200,74,.90), 0 0 42px rgba(245,200,74,.60); }
-    }
+    @keyframes pulseGlow{ 0%, 100%{ text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 0 6px rgba(245,200,74,.40), 0 0 12px rgba(245,200,74,.20);} 50%{ text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 0 22px rgba(245,200,74,.90), 0 0 42px rgba(245,200,74,.60);} }
 
     .title{ font-weight:800; font-size: clamp(18px, 2.3vw, 26px);} .subtitle{ color:var(--muted); font-size:14px; }
     .mid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; align-items:stretch; padding: 0 clamp(16px, 3vw, 28px) 28px; }
@@ -93,33 +70,17 @@
     .tips{ position:relative; height:110px; overflow:hidden; }
     .tips ul{ list-style:none; padding:0; margin:0; position:absolute; inset:0; animation: tips 16s ease-in-out infinite; }
     .tips li{ height:110px; display:flex; align-items:center; }
-    @keyframes tips{
-      0%{ transform: translateY(0%);} 25%{ transform: translateY(0%);} 
-      30%{ transform: translateY(-100%);} 55%{ transform: translateY(-100%);} 
-      60%{ transform: translateY(-200%);} 85%{ transform: translateY(-200%);} 
-      90%{ transform: translateY(-300%);} 100%{ transform: translateY(-300%);} 
-    }
-
-    /* Background image uploader UI */
-    .uploader{ margin-top:14px; padding:12px; background:#0e131b; border:1px solid rgba(58,160,255,.18); border-radius:10px; }
-    .uploader .u-title{ font-weight:700; margin-bottom:8px; font-size:14px; }
-    .uploader .u-row{ display:flex; align-items:center; gap:10px; margin-top:10px; }
-    .uploader label{ font-size:12px; color:var(--muted); }
-    .uploader .u-btn{ display:inline-block; padding:8px 10px; border-radius:8px; background:#121a25; border:1px solid rgba(58,160,255,.25); cursor:pointer; user-select:none; font-size:13px; }
-    .uploader .u-btn.ghost{ background:transparent; border-color:rgba(58,160,255,.18); }
-    .uploader .u-help{ margin-top:8px; font-size:11px; color:var(--muted); opacity:.85; }
+    @keyframes tips{ 0%{ transform: translateY(0%);} 25%{ transform: translateY(0%);} 30%{ transform: translateY(-100%);} 55%{ transform: translateY(-100%);} 60%{ transform: translateY(-200%);} 85%{ transform: translateY(-200%);} 90%{ transform: translateY(-300%);} 100%{ transform: translateY(-300%);} }
 
     .footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px clamp(16px, 3vw, 28px); font-size:12px; color:var(--muted); border-top:1px solid rgba(58,160,255,.18); background:#0f141dcc; }
     .dots::after{ content:"…"; animation: dots 1.6s steps(4,end) infinite; }
     @keyframes dots { 0%{content:""} 25%{content:"."} 50%{content:".."} 75%{content:"..."} }
 
-    @media (prefers-reduced-motion: reduce){
-      .gradient,.grid,.twinkle,.streaks,.spinner,.tips ul,.bar > span,.logo{ animation:none !important; }
-    }
+    @media (prefers-reduced-motion: reduce){ .gradient,.grid,.twinkle,.streaks,.spinner,.tips ul,.bar > span,.logo{ animation:none !important; } }
   </style>
 </head>
 <body>
-  <!-- Background layers (user image sits behind everything) -->
+  <!-- Background layers (optional image sits behind everything) -->
   <div id="userbg" class="layer userbg" aria-hidden="true"></div>
   <div class="layer gradient"></div>
   <div class="layer grid"></div>
@@ -158,20 +119,6 @@
               <li>Respect the chain of command; coordinate assaults and breaches.</li>
             </ul>
           </div>
-
-          <!-- Background image uploader -->
-          <div class="uploader">
-            <div class="u-title">Background Image</div>
-            <label class="u-btn">Upload Image
-              <input id="bgFile" type="file" accept="image/*" hidden>
-            </label>
-            <button id="bgClear" class="u-btn ghost" type="button">Clear</button>
-            <div class="u-row">
-              <label for="bgOpacity">Opacity</label>
-              <input id="bgOpacity" type="range" min="0" max="100" value="35">
-            </div>
-            <div class="u-help">Tip: you can also drag & drop an image anywhere on this page.</div>
-          </div>
         </div>
       </div>
 
@@ -192,6 +139,30 @@
       const gameMode   = $("gameMode");
       const maxPlayers = $("maxPlayers");
       const steamID    = $("steamID");
+      const userbg     = $("userbg");
+
+      /* ==============================================
+         MANUAL BACKGROUND (hosted in your GitHub repo)
+         - Upload image(s) to your repo (e.g., /assets/bg.jpg)
+         - Set BG_IMAGE to "/assets/bg.jpg" OR a full URL
+         - Optional: override via query string ?bg=/assets/bg2.jpg
+         - Optional: opacity via ?bg_opacity=0..100 (default 35)
+         ============================================== */
+      const DEFAULT_BG_IMAGE = ""; // e.g., "/assets/bg.jpg" once you upload
+      const DEFAULT_BG_OPACITY = 35; // percent
+
+      function applyManualBackground(){
+        if(!userbg) return;
+        const q = new URLSearchParams(location.search);
+        const qImg = q.get('bg');
+        const qOp  = q.get('bg_opacity');
+        const img  = (qImg ?? DEFAULT_BG_IMAGE).trim();
+        const opct = Math.max(0, Math.min(100, Number(qOp ?? DEFAULT_BG_OPACITY) || DEFAULT_BG_OPACITY));
+        if(img){ userbg.style.backgroundImage = `url(${img})`; }
+        userbg.style.opacity = String(opct/100);
+      }
+
+      applyManualBackground();
 
       let total = 0, needed = 0, engineTouched = false;
       function draw(){
@@ -244,61 +215,6 @@
           if(needed>0) requestAnimationFrame(tick); else statusEl.textContent = 'Finishing up…';
         })();
       }, 600);
-
-      /* ===== Background image: upload / drag-drop / opacity / persistence ===== */
-      const userbg    = $("userbg");
-      const bgFile    = $("bgFile");
-      const bgClear   = $("bgClear");
-      const bgOpacity = $("bgOpacity");
-
-      function setBg(src){
-        if(!userbg) return;
-        if(src){
-          userbg.style.backgroundImage = `url(${src})`;
-          try{ localStorage.setItem('ls_bg_img', src); }catch(e){}
-        }else{
-          userbg.style.backgroundImage = '';
-          try{ localStorage.removeItem('ls_bg_img'); }catch(e){}
-        }
-      }
-      function setBgOpacity(v){
-        const o = Math.max(0, Math.min(100, Number(v)||0))/100;
-        if(userbg) userbg.style.opacity = String(o);
-        if(bgOpacity) bgOpacity.value = String(Math.round(o*100));
-        try{ localStorage.setItem('ls_bg_opacity', String(Math.round(o*100))); }catch(e){}
-      }
-
-      // Restore saved
-      try{
-        const savedImg = localStorage.getItem('ls_bg_img');
-        const savedOp  = localStorage.getItem('ls_bg_opacity');
-        if(savedImg) setBg(savedImg);
-        setBgOpacity(savedOp || 35);
-      }catch(e){}
-
-      // File input
-      if(bgFile){
-        bgFile.addEventListener('change', function(){
-          const file = this.files && this.files[0]; if(!file) return;
-          const reader = new FileReader();
-          reader.onload = (e)=>{ setBg(e.target.result); };
-          reader.readAsDataURL(file);
-          this.value = '';
-        });
-      }
-      if(bgClear){ bgClear.addEventListener('click', ()=> setBg(null)); }
-      if(bgOpacity){ bgOpacity.addEventListener('input', (e)=> setBgOpacity(e.target.value)); }
-
-      // Drag & drop anywhere
-      document.addEventListener('dragover', (ev)=>{ ev.preventDefault(); });
-      document.addEventListener('drop', (ev)=>{
-        ev.preventDefault();
-        const file = ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = (e)=>{ setBg(e.target.result); };
-        reader.readAsDataURL(file);
-      });
     })();
   </script>
 </body>

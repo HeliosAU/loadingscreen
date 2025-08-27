@@ -5,176 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Loading…</title>
   <style>
-    /* =====================================
-       GMod Loading Screen — lag‑proof FX
-       -----------------------------------
-       - Pure CSS keyframe animations (time‑based)
-       - Only transform/opacity changes (GPU‑friendly)
-       - No external assets; single file
-       - JS only for wiring GMod callbacks + progress text
-       ===================================== */
-
     :root{
       --bg1: #0c0f14;
       --bg2: #10151d;
-      --accent: #f5c84a;     /* Midas‑y gold by default */
-      --accent-2: #ff6b6b;   /* warm highlight */
+      --accent: #f5c84a;
+      --accent-2: #3aa0ff;
       --text: #e8ecf1;
       --muted: #8a97a8;
       --card: #131923cc;
     }
-
     *{box-sizing:border-box}
-    html,body{height:100%;}
-    body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
-      color:var(--text); background: var(--bg1); overflow:hidden;
-    }
-
-    /* ===== Animated background layers (CSS‑only, time‑based) ===== */
-    .layer{
-      position:fixed; inset:0; pointer-events:none; z-index:-1;
-    }
-    /* Soft gradient that slowly shifts */
-    .gradient{
-      background: radial-gradient(1200px 800px at 15% 20%, #1b2331 0%, transparent 60%),
-                  radial-gradient(1000px 700px at 90% 80%, #1a2a33 0%, transparent 60%),
-                  linear-gradient(120deg, var(--bg2), var(--bg1));
-      animation: hue 30s linear infinite;
-      filter: saturate(1.1);
-    }
-    @keyframes hue{ from{ filter:hue-rotate(0deg) saturate(1.1);} to{ filter:hue-rotate(360deg) saturate(1.1);} }
-
-    /* Faint moving grid */
-    .grid{
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px, 40px 40px;
-      background-position: 0 0, 0 0;
-      animation: pan 20s linear infinite;
-    }
+    html,body{height:100%}
+    body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color:var(--text); background: var(--bg1); overflow:hidden;}
+    .layer{ position:fixed; inset:0; pointer-events:none; z-index:-1; }
+    .gradient{background: radial-gradient(1200px 800px at 15% 20%, #1b2331 0%, transparent 60%), radial-gradient(1000px 700px at 90% 80%, #0e2031 0%, transparent 60%), linear-gradient(120deg, var(--bg2), var(--bg1)); animation: hue 30s linear infinite; filter: saturate(1.05);} 
+    @keyframes hue{ from{ filter:hue-rotate(0deg) saturate(1.05);} to{ filter:hue-rotate(360deg) saturate(1.05);} }
+    .grid{background-image: linear-gradient(rgba(58,160,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(58,160,255,0.08) 1px, transparent 1px); background-size: 40px 40px, 40px 40px; animation: pan 20s linear infinite;} 
     @keyframes pan{ to{ background-position: 40px 0, 0 40px; } }
-
-    /* Subtle stars/twinkles using repeating radial gradients */
-    .twinkle{ background:
-      radial-gradient(2px 2px at 10% 15%, rgba(255,255,255,0.15) 0 2px, transparent 3px),
-      radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.12) 0 2px, transparent 3px),
-      radial-gradient(2px 2px at 30% 85%, rgba(255,255,255,0.10) 0 2px, transparent 3px);
-      animation: fade 6s ease-in-out infinite;
-    }
+    .twinkle{background: radial-gradient(2px 2px at 10% 15%, rgba(255,255,255,0.14) 0 2px, transparent 3px), radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.12) 0 2px, transparent 3px), radial-gradient(2px 2px at 30% 85%, rgba(255,255,255,0.10) 0 2px, transparent 3px); animation: fade 6s ease-in-out infinite;} 
     @keyframes fade{ 0%,100%{opacity:.45} 50%{opacity:.2} }
+    .streaks{background-image: repeating-linear-gradient(200deg, rgba(58,160,255,.08) 0 2px, transparent 2px 20px); animation: drift 8s linear infinite; opacity:.22;} 
+    @keyframes drift{ to{ background-position: 200px -200px; } }
 
-    /* ===== Layout ===== */
-    .wrap{
-      position:relative; height:100%; width:100%; display:grid; place-items:center;
-      padding: clamp(20px, 4vw, 48px);
+    .wrap{position:relative; height:100%; width:100%; display:grid; place-items:center; padding: clamp(20px, 4vw, 48px);}    
+    .card{width:min(980px, 94vw); background:var(--card); border:1px solid rgba(58,160,255,.18); border-radius:18px; box-shadow: 0 30px 60px rgba(0,0,0,.35); overflow:hidden; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);} 
+    .top{display:flex; gap:16px; align-items:center; padding:24px clamp(16px, 3vw, 28px); background:linear-gradient(180deg, rgba(255,255,255,.04), transparent);}    
+
+    /* Golden uppercase M with pulsing glow */
+    .logo{font-weight:900; font-size: clamp(40px, 6vw, 64px); letter-spacing:1px; color: var(--accent); text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 0 12px rgba(245,200,74,.55), 0 0 28px rgba(245,200,74,.28); position:relative; line-height:1; display:inline-block; animation: pulseGlow 3s ease-in-out infinite;} 
+    @keyframes pulseGlow{
+      0%, 100%{ text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 0 6px rgba(245,200,74,.4), 0 0 12px rgba(245,200,74,.2); }
+      50%{ text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 0 22px rgba(245,200,74,.9), 0 0 42px rgba(245,200,74,.6); }
     }
 
-    .card{
-      width:min(900px, 92vw); background:var(--card); border:1px solid #1e2633; border-radius:18px;
-      box-shadow: 0 30px 60px rgba(0,0,0,.35);
-      overflow:hidden; backdrop-filter: blur(6px);
-    }
-
-    .top{
-      display:flex; gap:16px; align-items:center; padding:24px clamp(16px, 3vw, 28px);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), transparent);
-    }
-
-    .logo{
-      height:54px; width:54px; border-radius:14px; display:grid; place-items:center; flex:0 0 auto;
-      background: radial-gradient(120% 120% at 30% 20%, var(--accent) 0%, #9a7c22 40%, #2b2b2b 100%);
-      color:#111; font-weight:900; font-size:24px; letter-spacing:1px; text-shadow:0 1px 0 rgba(255,255,255,.35);
-      position:relative; overflow:hidden;
-    }
-    /* Shimmer on the logo to prove time‑based anim */
-    .logo::after{
-      content:""; position:absolute; inset:-40% -40%; transform:rotate(25deg);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
-      animation: sweep 2.8s linear infinite;
-    }
-    @keyframes sweep { from{ transform:translateX(-120%) rotate(25deg);} to{ transform:translateX(120%) rotate(25deg);} }
-
-    .title{ font-weight:800; font-size: clamp(18px, 2.3vw, 26px); letter-spacing:.5px; }
-    .subtitle{ color:var(--muted); font-size:14px; }
-
-    .mid{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; align-items:center; padding: 0 clamp(16px, 3vw, 28px) 28px;
-    }
-
-    /* Progress + status */
-    .progress{
-      position:relative; background:#0f141d; border:1px solid #1c2533; border-radius:14px; padding:18px; min-height:120px;
-    }
-    .bar{ height:10px; background:#0a0f16; border:1px solid #162131; border-radius:999px; overflow:hidden; }
-    .bar > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-2));
-      animation: barber 1.2s linear infinite; background-size: 40px 100%;
-      box-shadow: 0 0 16px rgba(245,200,74,.45);
-    }
-    @keyframes barber{ to{ background-position: 40px 0;} }
-
-    .status{ margin-top:10px; color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-    /* Spinner that rotates at a constant speed (CSS keyframes) */
-    .spinner{
-      width:70px; height:70px; border-radius:50%; margin: 0 auto 8px; border: 3px solid rgba(255,255,255,.12);
-      border-top-color: var(--accent); border-right-color: rgba(255,255,255,.24);
-      animation: spin 1.1s linear infinite;
-    }
+    .title{ font-weight:800; font-size: clamp(18px, 2.3vw, 26px);} .subtitle{ color:var(--muted); font-size:14px; }
+    .mid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; align-items:stretch; padding: 0 clamp(16px, 3vw, 28px) 28px; }
+    .progress{ background:#0f141d; border:1px solid rgba(58,160,255,.18); border-radius:14px; padding:18px; min-height:168px; }
+    .spinner{ width:70px; height:70px; border-radius:50%; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,.12); border-top-color: var(--accent); border-right-color: rgba(255,255,255,.24); animation: spin 1.1s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg);} }
-
-    .kv{
-      display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px; font-size:14px;
-    }
-    .kv div{ background:#0f141d; border:1px solid #1c2533; border-radius:10px; padding:10px 12px; min-height:40px; }
+    .bar{ height:12px; background:#0a0f16; border:1px solid #162131; border-radius:999px; overflow:hidden; }
+    .bar > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-2)); animation: barber 1.2s linear infinite; background-size: 40px 100%; box-shadow: 0 0 16px rgba(245,200,74,.45);} 
+    @keyframes barber{ to{ background-position: 40px 0;} }
+    .status{ margin-top:10px; color:var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .kv{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px; font-size:14px; }
+    .kv div{ background:#0f141d; border:1px solid rgba(58,160,255,.18); border-radius:10px; padding:10px 12px; }
     .kv b{ display:block; font-size:12px; color:var(--muted); font-weight:600; margin-bottom:2px; }
-
-    .right{
-      background:#0f141d; border:1px solid #1c2533; border-radius:14px; padding:18px; min-height:120px;
-    }
-
-    /* Cycling tips using pure CSS (no timers) */
-    .tips{ position:relative; height:90px; overflow:hidden; }
+    .right{ background:#0f141d; border:1px solid rgba(58,160,255,.18); border-radius:14px; padding:18px; min-height:168px; }
+    .tips{ position:relative; height:110px; overflow:hidden; }
     .tips ul{ list-style:none; padding:0; margin:0; position:absolute; inset:0; animation: tips 16s ease-in-out infinite; }
-    .tips li{ height:90px; display:flex; align-items:center; }
-    @keyframes tips{
-      0%{ transform: translateY(0%);} 25%{ transform: translateY(0%);} 
-      30%{ transform: translateY(-100%);} 55%{ transform: translateY(-100%);} 
-      60%{ transform: translateY(-200%);} 85%{ transform: translateY(-200%);} 
-      90%{ transform: translateY(-300%);} 100%{ transform: translateY(-300%);} 
-    }
-
-    .footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px clamp(16px, 3vw, 28px); font-size:12px; color:var(--muted); border-top:1px solid #1c2533; background:#0f141dcc; }
+    .tips li{ height:110px; display:flex; align-items:center; }
+    @keyframes tips{0%{ transform: translateY(0%);}25%{ transform: translateY(0%);}30%{ transform: translateY(-100%);}55%{ transform: translateY(-100%);}60%{ transform: translateY(-200%);}85%{ transform: translateY(-200%);}90%{ transform: translateY(-300%);}100%{ transform: translateY(-300%);} }
+    .footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px clamp(16px, 3vw, 28px); font-size:12px; color:var(--muted); border-top:1px solid rgba(58,160,255,.18); background:#0f141dcc; }
     .dots::after{ content:"…"; animation: dots 1.6s steps(4,end) infinite; }
     @keyframes dots { 0%{content:""} 25%{content:"."} 50%{content:".."} 75%{content:"..."} }
-
-    /* Respect reduced-motion */
-    @media (prefers-reduced-motion: reduce){
-      .gradient,.grid,.twinkle,.logo::after,.spinner,.tips ul,.bar > span{ animation:none !important; }
-    }
+    @media (prefers-reduced-motion: reduce){.gradient,.grid,.twinkle,.streaks,.spinner,.tips ul,.bar > span,.logo{ animation:none !important; }}
   </style>
 </head>
 <body>
-  <!-- Background FX (pure CSS, time‑based) -->
   <div class="layer gradient"></div>
   <div class="layer grid"></div>
   <div class="layer twinkle"></div>
-
+  <div class="layer streaks"></div>
   <div class="wrap">
     <div class="card">
       <div class="top">
-        <div class="logo" title="Logo">M</div>
+        <div class="logo">M</div>
         <div>
           <div class="title" id="serverName">Connecting…</div>
-          <div class="subtitle"><span id="subtitle">This screen uses time‑based CSS animations so it won’t slow down with game/network lag.</span></div>
+          <div class="subtitle"><span id="subtitle">Incoming transmission… establishing secure link to command.</span></div>
         </div>
       </div>
-
       <div class="mid">
         <div class="progress">
-          <div class="spinner" aria-hidden="true"></div>
-          <div class="bar" aria-label="download progress"><span id="barFill"></span></div>
+          <div class="spinner"></div>
+          <div class="bar"><span id="barFill"></span></div>
           <div class="status" id="status">Waiting for download info…</div>
           <div class="kv">
             <div><b>Map</b><span id="mapName">—</span></div>
@@ -184,93 +88,36 @@
           </div>
         </div>
         <div class="right">
-          <div style="font-weight:700; letter-spacing:.3px; margin-bottom:8px;">Tips</div>
+          <div style="font-weight:700; margin-bottom:8px;">Field Briefing</div>
           <div class="tips">
             <ul>
-              <li>Press <b>F1</b> or your help key for server rules & keybinds.</li>
-              <li>Use <b>@</b> in chat to contact staff (if enabled).</li>
-              <li>Bind a push‑to‑talk key for clear comms.</li>
-              <li>Be respectful — roleplay thrives on cooperation.</li>
+              <li>Unit comms: bind push‑to‑talk for clear orders from command.</li>
+              <li>Rally at your regiment staging point before moving out.</li>
+              <li>Medics prioritize wounded troopers; provide covering fire.</li>
+              <li>Respect the chain of command; coordinate assaults and breaches.</li>
             </ul>
           </div>
         </div>
       </div>
-
       <div class="footer">
-        <div>If this takes a while, you’re probably downloading workshop content. First load can be the longest.</div>
+        <div>First deployment may take longer as workshop assets synchronize.</div>
         <div class="dots">Loading</div>
       </div>
     </div>
   </div>
-
   <script>
-    // =====================================================
-    // GMod callback wiring (per Facepunch Wiki)
-    // These functions are called by Garry's Mod if present
-    // =====================================================
     (function(){
       const $ = (id)=>document.getElementById(id);
-      const serverName = $("serverName");
-      const statusEl = $("status");
-      const barFill = $("barFill");
-      const mapName = $("mapName");
-      const gameMode = $("gameMode");
-      const maxPlayers = $("maxPlayers");
-      const steamID = $("steamID");
-
-      let total = 0, needed = 0;
-      const draw = ()=>{
-        if(total > 0){
-          const done = Math.max(0, total - needed);
-          const pct = Math.round(done / total * 100);
-          barFill.style.width = pct + "%";
-          statusEl.textContent = `Downloading files: ${done}/${total} (${pct}%)`;
-        }
-      };
-
-      // Called once with server & player info
-      window.GameDetails = function(servername, serverurl, mapname, maxplayers, steamid, gamemode/*, volume, language*/){
-        serverName.textContent = servername || "Garry's Mod Server";
-        mapName.textContent = mapname || "unknown";
-        gameMode.textContent = gamemode || "—";
-        maxPlayers.textContent = maxplayers || "—";
-        steamID.textContent = steamid || "—";
-        statusEl.textContent = "Preparing downloads…";
-      };
-
-      // Total number of files to download
-      window.SetFilesTotal = function(t){ total = Number(t)||0; draw(); };
-      // Files still needed
-      window.SetFilesNeeded = function(n){ needed = Number(n)||0; draw(); };
-      // Human‑readable download filename
-      window.DownloadingFile = function(name){ if(name) statusEl.textContent = `Downloading: ${name}`; };
-      // Status from engine (e.g., "Starting Lua…")
-      window.SetStatusChanged = function(s){ if(s) statusEl.textContent = s; };
-
-      // ===== Fallback for testing in a normal browser =====
-      function fromQuery(){
-        const q = new URLSearchParams(location.search);
-        const qServer = q.get('hostname') || q.get('server') || q.get('servername');
-        const qMap = q.get('mapname') || q.get('map');
-        const qMode = q.get('gamemode') || q.get('mode');
-        const qMax = q.get('maxplayers');
-        const qSteam = q.get('steamid') || q.get('steamid64') || q.get('s');
-        if(qServer) serverName.textContent = qServer;
-        if(qMap) mapName.textContent = qMap;
-        if(qMode) gameMode.textContent = qMode;
-        if(qMax) maxPlayers.textContent = qMax;
-        if(qSteam) steamID.textContent = qSteam;
-      }
-      fromQuery();
-
-      // Optional: simulate progress in a browser preview
-      if(!('GameDetails' in window)){ // we just defined it above; this check is always false in GMod
-        (function demo(){
-          let i=0; total = 120; needed = 120; draw();
-          const tick = ()=>{ needed = Math.max(0, needed - Math.round(Math.random()*3)); draw(); if(needed>0) requestAnimationFrame(tick); else statusEl.textContent = 'Finishing up…'; };
-          setTimeout(()=>requestAnimationFrame(tick), 500);
-        })();
-      }
+      const serverName=$("serverName"), statusEl=$("status"), barFill=$("barFill"), mapName=$("mapName"), gameMode=$("gameMode"), maxPlayers=$("maxPlayers"), steamID=$("steamID");
+      let total=0, needed=0, engineTouched=false;
+      function draw(){if(total>0){const done=Math.max(0,total-needed);const pct=Math.round(done/total*100);barFill.style.width=pct+"%";statusEl.textContent=`Downloading files: ${done}/${total} (${pct}%)`;}}
+      window.GameDetails=function(servername,serverurl,mapname,maxplayers,steamid,gamemode){engineTouched=true;serverName.textContent=servername||"Garry's Mod Server";mapName.textContent=mapname||"unknown";gameMode.textContent=gamemode||"—";maxPlayers.textContent=maxplayers||"—";steamID.textContent=steamid||"—";statusEl.textContent="Preparing downloads…";};
+      window.SetFilesTotal=function(t){engineTouched=true;total=Number(t)||0;draw();};
+      window.SetFilesNeeded=function(n){engineTouched=true;needed=Number(n)||0;draw();};
+      window.DownloadingFile=function(name){engineTouched=true;if(name)statusEl.textContent=`Downloading: ${name}`;};
+      window.SetStatusChanged=function(s){engineTouched=true;if(s)statusEl.textContent=s;};
+      (function fromQuery(){const q=new URLSearchParams(location.search);const qServer=q.get('hostname')||q.get('server')||q.get('servername');const qMap=q.get('mapname')||q.get('map');const qMode=q.get('gamemode')||q.get('mode');const qMax=q.get('maxplayers');const qSteam=q.get('steamid')||q.get('steamid64')||q.get('s');if(qServer)serverName.textContent=qServer;if(qMap)mapName.textContent=qMap;if(qMode)gameMode.textContent=qMode;if(qMax)maxPlayers.textContent=qMax;if(qSteam)steamID.textContent=qSteam;})();
+      setTimeout(function(){if(engineTouched)return;total=120;needed=120;draw();statusEl.textContent='Simulating downloads…';(function tick(){needed=Math.max(0,needed-Math.round(Math.random()*3));draw();if(needed>0)requestAnimationFrame(tick);else statusEl.textContent='Finishing up…';})();},600);
     })();
   </script>
 </body>
